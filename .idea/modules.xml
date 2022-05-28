@@ -3,6 +3,7 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/.idea/discord-radio-bot.iml" filepath="$PROJECT_DIR$/.idea/discord-radio-bot.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Python 3.7/01.avatar-changer/.idea/myforstproject.iml" filepath="$PROJECT_DIR$/../Python 3.7/01.avatar-changer/.idea/myforstproject.iml" />
     </modules>
   </component>
 </project>
