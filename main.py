@@ -3,7 +3,8 @@ import logging
 import discord
 from discord.ext import commands
 import random, datetime
-
+# TODO: Bot connecting to voice channel. Playing sounds in it.
+# TODO: Playing sounds from web. (for example: youtube, vk, soundcloud?)
 
 class Config:
     """
@@ -20,7 +21,7 @@ class Config:
         return access_token
 
 
-logging.basicConfig(format=u'[LINE:%(lineno)d]# %(levelname)-9s [%(asctime)s]  %(message)s',
+logging.basicConfig(format=u'%(levelname)-9s [%(asctime)s]  %(message)s',
                     level=logging.INFO, filename='logs.log')
 
 getconfig = Config()
@@ -30,10 +31,30 @@ client = commands.Bot(command_prefix='%')
 client.remove_command('help')
 
 
+def logging_message(ctx, command):
+    """
+    logging messages w/ commands into .log file
+    TODO: decorator;
+    """
+    server = str(ctx.guild)
+    chat = str(ctx.channel.name)
+    username = str(ctx.author)
+    logging.info(f'{server} | ({chat}) {username}: {command}')
+
+
+def logging_response(ctx, response):
+    """
+    logging responses to commands into .log file
+    TODO: combine w/ "logging_message"
+    """
+    username = str(ctx.author)
+    logging.info(f'*Response sent to {username}: {response}')
+
+
 @client.event
 async def on_ready():
     print('Ready')
-    logging.info('___We have been logged as a user {0.user}___'.format(client))
+    logging.info('___We have been logged as a {0.user}___'.format(client))
 
 
 @client.command()
@@ -41,6 +62,9 @@ async def help(ctx):
     """
     %help
     """
+    command = r'%help'
+    logging_message(ctx, command)
+
     embed = discord.Embed(
         title='Bot Commands',
         description='All available commands for today. \n ⠀',
@@ -56,32 +80,48 @@ async def help(ctx):
     embed.add_field(
         # https://thiscatdoesnotexist.com/
         name='%cat',
-        value="This cat doesn't exist. Doesn't work propely. \n ⠀",
+        value="This cat doesn't exist. Doesn't work propely as for me. \n ⠀",
         inline=False
     )
     embed.add_field(
         # https://thisartworkdoesnotexist.com/
         name='%art',
-        value="This art doesn't exist. Doesn't work propely. \n ",
+        value="This art doesn't exist. Doesn't work propely as for me. \n ",
         inline=False
     )
     await ctx.send(embed=embed)
+
+    logging_response(ctx, embed)
 
 
 @client.command()
 async def cat(ctx):
     """
     %cat
+    TODO: find out how discord handle this website
     """
-    await ctx.send(content='https://thiscatdoesnotexist.com/')
+    command = r'%cat'
+    logging_message(ctx, command)
+
+    content = 'https://thiscatdoesnotexist.com/'
+    await ctx.send(content=content)
+
+    logging_response(ctx, content)
 
 
 @client.command()
 async def art(ctx):
     """
     %art
+    TODO: find out how discord handle this website
     """
-    await ctx.send(content='https://thisartworkdoesnotexist.com/')
+    command = r'%art'
+    logging_message(ctx, command)
+
+    content = 'https://thisartworkdoesnotexist.com/'
+    await ctx.send(content=content)
+
+    logging_response(ctx, content)
 
 
 if __name__ == '__main__':
@@ -122,7 +162,7 @@ if __name__ == '__main__':
 #
 #
 #
-# def logging_message(*qw):
+# def logging_message(ctx):
 #     """
 #     Special decorator for logging messages with commands
 #     """
@@ -144,5 +184,5 @@ if __name__ == '__main__':
 #         return on_command
 #     return logging_message
 #
-# 
+#
 # @logging_message()
